@@ -41,7 +41,7 @@ function DepositRequestsTable(props) {
   useEffect(() => {
     if (searchText.length !== 0) {
       setData(
-        _.filter(depositRequests, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+        _.filter(depositRequests, (item) => item.userName.toLowerCase().includes(searchText.toLowerCase()))
       );
       setPage(0);
     } else {
@@ -169,13 +169,6 @@ function DepositRequestsTable(props) {
                     selected={isSelected}
                   // onClick={(event) => handleClick(n)}
                   >
-                    <TableCell className="w-40 md:w-64 text-center" padding="none">
-                      <Checkbox
-                        checked={isSelected}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => handleCheck(event, n.id)}
-                      />
-                    </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row">
                       {n.bankName}

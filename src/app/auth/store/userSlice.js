@@ -74,21 +74,13 @@ export const createUserSettingsFirebase = (authUser) => async (dispatch, getStat
   return dispatch(setUserData(user));
 };
 
-export const setUserData = (user) => async (dispatch, getState) => {
-  /*
-      todo:  You can redirect the logged-in user to a specific route depending on his role
-  */
-
-  console.log("USER")
+export const setUserData = (user) => async (dispatch, getState) => { console.log("USER")
   console.log(user)
 
   history.location.state = {
     redirectUrl: user.redirectUrl,
   };
 
-  /*
-    Set User Settings
-     */
   dispatch(setDefaultSettings(user.data.settings));
 
   dispatch(setUser(user));

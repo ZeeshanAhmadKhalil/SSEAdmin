@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import JWTLoginTab from './tabs/JWTLoginTab';
 
@@ -28,7 +28,10 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 function Login() {
-
+  useEffect(() => {
+    console.log("LOCALSTORAGE.GETITEM('USER_DATA')")
+    console.log(localStorage.getItem('user_data'))
+  })
   return (
     <Root className="flex flex-col flex-auto items-center justify-center flex-shrink-0 p-16 md:p-24">
       <motion.div

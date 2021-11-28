@@ -91,51 +91,6 @@ function DepositRequestsTableHead(props) {
   return (
     <TableHead>
       <TableRow className="h-48 sm:h-64">
-        <TableCell padding="none" className="w-40 md:w-64 text-center z-99">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < props.rowCount}
-            checked={props.rowCount !== 0 && numSelected === props.rowCount}
-            onChange={props.onSelectAllClick}
-          />
-          {numSelected > 0 && (
-            <Box
-              className="flex items-center justify-center absolute w-64 top-0 ltr:left-0 rtl:right-0 mx-56 h-64 z-10 border-b-1"
-              sx={{
-                background: (theme) => theme.palette.background.paper,
-              }}
-            >
-              <IconButton
-                aria-owns={selectedDepositRequestsMenu ? 'selectedDepositRequestsMenu' : null}
-                aria-haspopup="true"
-                onClick={openSelectedDepositRequestsMenu}
-                size="large"
-              >
-                <Icon>more_horiz</Icon>
-              </IconButton>
-              <Menu
-                id="selectedDepositRequestsMenu"
-                anchorEl={selectedDepositRequestsMenu}
-                open={Boolean(selectedDepositRequestsMenu)}
-                onClose={closeSelectedDepositRequestsMenu}
-              >
-                <MenuList>
-                  <MenuItem
-                    onClick={() => {
-                      dispatch(removeDepositRequests(selectedDepositRequestIds));
-                      props.onMenuItemClick();
-                      closeSelectedDepositRequestsMenu();
-                    }}
-                  >
-                    <ListItemIcon className="min-w-40">
-                      <Icon>delete</Icon>
-                    </ListItemIcon>
-                    <ListItemText primary="Remove" />
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
-          )}
-        </TableCell>
         {rows.map((row) => {
           return (
             <TableCell

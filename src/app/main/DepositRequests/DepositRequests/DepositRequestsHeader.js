@@ -48,7 +48,7 @@ function DepositRequestsHeader(props) {
             <Icon color="action">search</Icon>
 
             <Input
-              placeholder="Search"
+              placeholder="Search User Name"
               className="flex flex-1 mx-8"
               disableUnderline
               fullWidth
