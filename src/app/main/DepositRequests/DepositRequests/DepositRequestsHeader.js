@@ -24,7 +24,7 @@ function DepositRequestsHeader(props) {
           animate={{ scale: 1, transition: { delay: 0.2 } }}
           className="text-24 md:text-32"
         >
-          people_outline
+          whatshot
         </Icon>
         <Typography
           component={motion.span}

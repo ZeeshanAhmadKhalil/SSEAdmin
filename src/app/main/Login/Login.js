@@ -8,6 +8,10 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import JWTLoginTab from './tabs/JWTLoginTab';
+import {
+  setUserData,
+} from '../../auth/store/userSlice'
+import { useDispatch } from 'react-redux';
 
 const Root = styled('div')(({ theme }) => ({
   background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
@@ -28,9 +32,16 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 function Login() {
+  const dispatch = useDispatch()
   useEffect(() => {
-    console.log("LOCALSTORAGE.GETITEM('USER_DATA')")
-    console.log(localStorage.getItem('user_data'))
+    let userData = window.localStorage.getItem('user_data')
+    console.log("USERDATA")
+    console.log(userData)
+    if (userData) {
+      userData = JSON.parse(userData)
+      dispatch(setUserData(userData))
+    }
+
   })
   return (
     <Root className="flex flex-col flex-auto items-center justify-center flex-shrink-0 p-16 md:p-24">

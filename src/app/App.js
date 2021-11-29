@@ -11,6 +11,7 @@ import { CacheProvider } from '@emotion/react';
 import { selectCurrLangDir } from 'app/store/i18nSlice';
 import withAppProviders from './withAppProviders';
 import { Auth } from './auth';
+import '../styles/custom.css'
 
 // import axios from 'axios';
 /**

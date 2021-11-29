@@ -98,6 +98,7 @@ class JwtService extends FuseUtils.EventEmitter {
         if (status == 200) {
           if (data.userModel.role.roleName == "Admin") {
             let userData = {
+              token: data.token,
               role: [data.userModel.role.roleName.toLowerCase()],
               data: {
                 displayName: data.userModel.fullName,
@@ -107,7 +108,7 @@ class JwtService extends FuseUtils.EventEmitter {
               },
               redirectUrl: '/deposit-requests',
             }
-            localStorage.setItem('user_data', userData)
+            localStorage.setItem('user_data', JSON.stringify(userData))
             resolve(userData)
           } else {
             reject("Invalid email or password")
@@ -158,6 +159,7 @@ class JwtService extends FuseUtils.EventEmitter {
       axios.defaults.headers.common.Authorization = `Bearer ${access_token}`
     } else {
       localStorage.removeItem('jwt_access_token')
+      localStorage.removeItem('user_data')
       delete axios.defaults.headers.common.Authorization
     }
   }

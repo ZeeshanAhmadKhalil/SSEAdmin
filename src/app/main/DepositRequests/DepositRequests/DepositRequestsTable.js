@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { getDepositRequests, selectDepositRequests } from '../store/depositRequestsSlice';
+import { getDepositRequests, selectDepositRequests, ChangeDepositRequestStatus } from '../store/depositRequestsSlice';
 import DepositRequestsTableHead from './DepositRequestsTableHead';
 
 function DepositRequestsTable(props) {
@@ -76,7 +76,6 @@ function DepositRequestsTable(props) {
   }
 
   function handleClick(item) {
-    props.history.push(`/depositRequest-crud/depositRequests/new`);
   }
 
   function handleCheck(event, id) {
@@ -125,6 +124,43 @@ function DepositRequestsTable(props) {
     );
   }
 
+  function RenderDepositRequestStatus(status, id) {
+    if (status == "Accepted") {
+      return (
+        <div className="accepted-status-chip">
+          {status}
+        </div>
+      )
+    } else if (status == "Rejected") {
+      return (
+        <div className="rejected-status-chip">
+          {status}
+        </div>
+      )
+    } else {
+      return (
+        <div className="accept-reject-btns-div">
+          <Icon
+            className="accept-btn"
+            onClick={() => {
+              dispatch(ChangeDepositRequestStatus({ status: "Accepted", depositRequestId: id }))
+            }}
+          >
+            check
+          </Icon>
+          <Icon
+            className="reject-btn"
+            onClick={() => {
+              dispatch(ChangeDepositRequestStatus({ status: "Rejected", depositRequestId: id }))
+            }}
+          >
+            clear
+          </Icon>
+        </div>
+      )
+    }
+  }
+
   return (
     <div className="w-full flex flex-col">
       <FuseScrollbars className="flex-grow overflow-x-auto">
@@ -160,16 +196,15 @@ function DepositRequestsTable(props) {
                 const isSelected = selected.indexOf(n.id) !== -1;
                 return (
                   <TableRow
-                    className="h-72 cursor-pointer"
+                    className="h-72"
                     hover
                     role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
                     key={n.id}
                     selected={isSelected}
-                  // onClick={(event) => handleClick(n)}
+                    onClick={(event) => handleClick(n)}
                   >
-
                     <TableCell className="p-4 md:p-16" component="th" scope="row">
                       {n.bankName}
                     </TableCell>
@@ -189,7 +224,7 @@ function DepositRequestsTable(props) {
                       {n.userName}
                     </TableCell>
                     <TableCell className="p-4 md:p-16" component="th" scope="row">
-                      {n.depositRequestStatus}
+                      {RenderDepositRequestStatus(n.depositRequestStatus, n.id)}
                     </TableCell>
                   </TableRow>
                 );

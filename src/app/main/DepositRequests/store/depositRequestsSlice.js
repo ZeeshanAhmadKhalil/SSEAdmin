@@ -1,43 +1,109 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getDepositRequests = createAsyncThunk('eCommerceApp/DepositRequests/getDepositRequests', async () => {
-  // const response = await axios.get('/api/employee-crud-app/DepositRequests');
-  // const data = await response.data;
-  const data = [
-    {
-      id: 1,
-      bankName: "HBL",
-      accountNumber: "3454593876305783",
-      accountTitle: "Zeeshan",
-      amount: "3000",
-      createdOn: new Date(2021, 10, 11),
-      depositRequestStatus: "Pending",
-      userName: "Zeeshan Ahmad",
-    },
-    {
-      id: 2,
-      bankName: "HBL",
-      accountNumber: "3454593876305783",
-      accountTitle: "Zeeshan",
-      amount: "3000",
-      createdOn: new Date(2021, 10, 11),
-      depositRequestStatus: "Pending",
-      userName: "Zeeshan Ahmad",
-    },
-    {
-      id: 3,
-      bankName: "HBL",
-      accountNumber: "3454593876305783",
-      accountTitle: "Zeeshan",
-      amount: "3000",
-      createdOn: new Date(2021, 10, 11),
-      depositRequestStatus: "Pending",
-      userName: "Zeeshan Ahmad",
-    },
-  ]
-  return data;
-});
+export const ChangeDepositRequestStatus = createAsyncThunk(
+  'eCommerceApp/DepositRequests/ChangeDepositRequestStatus',
+  async ({ status, depositRequestId }, { dispatch, getState }) => {
+
+    const token = getState().auth.user.token
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("x-auth-token", token);
+
+    var raw = JSON.stringify({
+      depositRequestId,
+      status,
+    });
+
+    var requestOptions = {
+      method: 'PATCH',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    var requestOptionsGet = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    fetch(process.env.REACT_APP_API_URL + "/Api/Admin/ChangeDepositRequestStatus",
+      requestOptions
+    ).then(response => {
+      console.log("RESPONSE")
+      console.log(response)
+      return response.status
+    }).then(async status => {
+      console.log("STATUS")
+      console.log(status)
+      if (status == 200) {
+        console.info("Status changed successfully")
+        dispatch(getDepositRequests())
+      } else {
+        console.error("Something went changing deposit req status")
+      }
+    }).catch(error => {
+      console.error('error', error)
+    })
+  }
+)
+
+export const getDepositRequests = createAsyncThunk(
+  'eCommerceApp/DepositRequests/getDepositRequests',
+  async (params, { dispatch, getState }) => {
+    try {
+      const token = getState().auth.user.token
+
+      console.log("TOKEN")
+      console.log(token)
+
+      var myHeaders = new Headers();
+      myHeaders.append("x-auth-token", token);
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      let result = await fetch(process.env.REACT_APP_API_URL + "/Api/Admin/GetDepositRequests",
+        requestOptions
+      ).then(async response => {
+        console.log("RESPONSE")
+        console.log(response)
+        return response.json().then(data => ({
+          status: response.status,
+          data,
+        }))
+      })
+
+      console.log("RESULT")
+      console.log(result)
+      const { status, data } = result
+      let data_ = []
+      if (status == 200) {
+        data.forEach(element => {
+          data_.push({
+            id: element._id,
+            bankName: element.bankName,
+            accountNumber: element.accountNumber,
+            accountTitle: element.accountTitle,
+            amount: element.amount,
+            createdOn: element.createdOn,
+            depositRequestStatus: element.depositRequestStatus.depositRequestStatus,
+            userName: element.user.fullName,
+          })
+        });
+      } else {
+        console.error("Something went wrong while getting deposit requests")
+      }
+      return data_;
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+);
 
 export const removeDepositRequests = createAsyncThunk(
   'eCommerceApp/DepositRequests/removeDepositRequests',
@@ -68,8 +134,7 @@ const DepositRequestsSlice = createSlice({
   },
   extraReducers: {
     [getDepositRequests.fulfilled]: DepositRequestsAdapter.setAll,
-    [removeDepositRequests.fulfilled]: (state, action) =>
-      DepositRequestsAdapter.removeMany(state, action.payload),
+    [removeDepositRequests.fulfilled]: (state, action) => DepositRequestsAdapter.removeMany(state, action.payload),
   },
 });
 

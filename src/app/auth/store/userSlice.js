@@ -74,14 +74,15 @@ export const createUserSettingsFirebase = (authUser) => async (dispatch, getStat
   return dispatch(setUserData(user));
 };
 
-export const setUserData = (user) => async (dispatch, getState) => { console.log("USER")
+export const setUserData = (user) => async (dispatch, getState) => {
+  console.log("USER")
   console.log(user)
 
   history.location.state = {
     redirectUrl: user.redirectUrl,
   };
 
-  dispatch(setDefaultSettings(user.data.settings));
+  // dispatch(setDefaultSettings(user.data.settings));
 
   dispatch(setUser(user));
 };
@@ -187,6 +188,7 @@ export const updateUserData = (user) => async (dispatch, getState) => {
 };
 
 const initialState = {
+  isLoggedIn: false,
   role: [], //todo: this is the current role
   data: {
     displayName: 'Raiden (Jack)',
